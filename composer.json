@@ -1,0 +1,24 @@
+{
+  "name" : "nia/requestresponse-http",
+  "description" : "Implementation of the request response pattern for the HTTP environment.",
+  "require" : {
+    "php" : ">=7.0.0",
+    "nia/requestresponse" : "*"
+  },
+  "license" : "MIT",
+  "keywords" : [ "nia", "request", "response", "http", "https" ],
+  "minimum-stability" : "dev",
+  "autoload" : {
+    "psr-4" : {
+      "Nia\\RequestResponse\\Http\\" : "sources/",
+      "Test\\Nia\\RequestResponse\\Http\\" : "tests/"
+    }
+  },
+  "type" : "library",
+  "homepage" : "http://www.nat-software.de",
+  "authors" : [ {
+    "name" : "Patrick Ullmann",
+    "email" : "patrick.ullmann@nat-software.de",
+    "role" : "lead"
+  } ]
+}
