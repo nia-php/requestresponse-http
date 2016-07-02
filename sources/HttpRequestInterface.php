@@ -111,4 +111,32 @@ interface HttpRequestInterface extends RequestInterface
      * @return bool Returns 'true' if the request is an XML HTTP request, otherwise 'false' will be returned.
      */
     public function isXmlHttpRequest(): bool;
+
+    /**
+     * Returns the host name.
+     *
+     * @return string The host name.
+     */
+    public function getHostName(): string;
+
+    /**
+     * Returns the port on which the request is made.
+     *
+     * @return int The port on which the request is made.
+     */
+    public function getPort(): int;
+
+    /**
+     * Returns the client IP address.
+     *
+     * @return string The client IP address.
+     */
+    public function getRemoteIpAddress(): string;
+
+    /**
+     * Checks whether the request is secure or not.
+     *
+     * @return bool Returns 'true' if the request is secure, otherwise 'false' will be returned.
+     */
+    public function isSecure(): bool;
 }

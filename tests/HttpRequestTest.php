@@ -35,7 +35,11 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
             'SCRIPT_NAME' => '/my/local/path/index.php',
             'REQUEST_URI' => '/my/local/path/webserver/folder/file?xxx=yyy',
             'HTTP_ACCEPT_LANGUAGE' => 'en',
-            'HTTP_ACCEPT_ENCODING' => 'gzip'
+            'HTTP_ACCEPT_ENCODING' => 'gzip',
+            'SERVER_NAME' => 'john-does-localhost',
+            'REMOTE_PORT' => '123456',
+            'REMOTE_ADDR' => '127.127.127.127',
+            'HTTPS' => 'on'
         ];
 
         $get = [
@@ -233,5 +237,37 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
     public function testIsXmlHttpRequest()
     {
         $this->assertSame(false, $this->request->isXmlHttpRequest());
+    }
+
+    /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::getHostName
+     */
+    public function testGetHostName()
+    {
+        $this->assertSame('john-does-localhost', $this->request->getHostName());
+    }
+
+    /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::getPort
+     */
+    public function testGetPort()
+    {
+        $this->assertSame(123456, $this->request->getPort());
+    }
+
+    /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::getRemoteIpAddress
+     */
+    public function testGetRemoteIpAddress()
+    {
+        $this->assertSame('127.127.127.127', $this->request->getRemoteIpAddress());
+    }
+
+    /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::isSecure
+     */
+    public function testIsSecure()
+    {
+        $this->assertSame(true, $this->request->isSecure());
     }
 }

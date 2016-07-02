@@ -89,6 +89,34 @@ class HttpRequest implements HttpRequestInterface
     private $stream = null;
 
     /**
+     * The host name.
+     *
+     * @var string
+     */
+    private $hostName = null;
+
+    /**
+     * The port on which the request is made.
+     *
+     * @var int
+     */
+    private $port = null;
+
+    /**
+     * The client IP address.
+     *
+     * @var string
+     */
+    private $remoteIpAddress = null;
+
+    /**
+     * Whether the request is secure or not.
+     *
+     * @var bool
+     */
+    private $isSecure = null;
+
+    /**
      * Constructor.
      *
      * @param string[] $server
@@ -143,6 +171,10 @@ class HttpRequest implements HttpRequestInterface
         }
 
         $this->stream = $stream;
+        $this->hostName = $server['SERVER_NAME'];
+        $this->port = (int) $server['REMOTE_PORT'];
+        $this->remoteIpAddress = $this->determineRemoteIpAddress($server);
+        $this->isSecure = $this->determineSecureConnection($server);
     }
 
     /**
@@ -260,6 +292,50 @@ class HttpRequest implements HttpRequestInterface
     }
 
     /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Nia\RequestResponse\Http\HttpRequestInterface::getHostName()
+     */
+    public function getHostName(): string
+    {
+        return $this->hostName;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Nia\RequestResponse\Http\HttpRequestInterface::getPort()
+     */
+    public function getPort(): int
+    {
+        return $this->port;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Nia\RequestResponse\Http\HttpRequestInterface::getRemoteIpAddress()
+     */
+    public function getRemoteIpAddress(): string
+    {
+        return $this->remoteIpAddress;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Nia\RequestResponse\Http\HttpRequestInterface::isSecure()
+     */
+    public function isSecure(): bool
+    {
+        return $this->isSecure;
+    }
+
+    /**
      * Determines the used method by using passed server configuration.
      *
      * @param string[] $server
@@ -328,5 +404,37 @@ class HttpRequest implements HttpRequestInterface
         $parts = explode('?', $server['REQUEST_URI']);
 
         return '/' . ltrim(substr($parts[0], strlen($path)), '/');
+    }
+
+    /**
+     * Determines the remote ip address by using passed server configuration.
+     *
+     * @param string[] $server
+     *            The server configuration.
+     * @return string The determined remote ip address.
+     */
+    private function determineRemoteIpAddress(array $server): string
+    {
+        if (array_key_exists('HTTP_X_FORWARDED_FOR', $server) && filter_var($server['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)) {
+            return $server['HTTP_X_FORWARDED_FOR'];
+        } elseif (array_key_exists('HTTP_CLIENT_IP', $server) && filter_var($server['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
+            return $server['HTTP_CLIENT_IP'];
+        } elseif (array_key_exists('HTTP_TRUE_CLIENT_IP', $server) && filter_var($server['HTTP_TRUE_CLIENT_IP'], FILTER_VALIDATE_IP)) {
+            return $server['HTTP_TRUE_CLIENT_IP'];
+        }
+
+        return $server['REMOTE_ADDR'];
+    }
+
+    /**
+     * Determines whether the connection is secure by using passed server configuration.
+     *
+     * @param string[] $server
+     *            The server configuration.
+     * @return bool Returns 'true' if the connection is secure, otherwise 'false' will be returned.
+     */
+    private function determineSecureConnection(array $server): bool
+    {
+        return array_key_exists('HTTPS', $server) && $server['HTTPS'];
     }
 }
