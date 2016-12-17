@@ -30,6 +30,29 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $array = [
+            'list' => [
+                'abc',
+                'def',
+                'map' => [
+                    'foo' => 'abc',
+                    'bar' => 'def'
+                ]
+            ],
+            'map' => [
+                'foo' => 'abc',
+                'bar' => 'def',
+                'list' => [
+                    'abc',
+                    'def'
+                ],
+                'map' => [
+                    'foo' => 'abc',
+                    'bar' => 'def'
+                ]
+            ]
+        ];
+
         $server = [
             'REQUEST_METHOD' => 'POST',
             'SCRIPT_NAME' => '/my/local/path/index.php',
@@ -42,17 +65,17 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
             'HTTPS' => 'on'
         ];
 
-        $get = [
+        $get = array_merge([
             'foo' => 'bar'
-        ];
+        ], $array);
 
-        $post = [
+        $post = array_merge([
             'foo' => 'baz'
-        ];
+        ], $array);
 
-        $cookies = [
+        $cookies = array_merge([
             'foo' => 'boo'
-        ];
+        ], $array);
 
         $uploadedFile1 = tempnam('/tmp', 'unittest-');
         $uploadedFile2a = tempnam('/tmp', 'unittest-');
@@ -143,7 +166,17 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
     public function testGetArguments()
     {
         $expected = [
-            'foo' => 'bar'
+            'foo' => 'bar',
+            'list--0' => 'abc',
+            'list--1' => 'def',
+            'list--map--foo' => 'abc',
+            'list--map--bar' => 'def',
+            'map--foo' => 'abc',
+            'map--bar' => 'def',
+            'map--list--0' => 'abc',
+            'map--list--1' => 'def',
+            'map--map--foo' => 'abc',
+            'map--map--bar' => 'def'
         ];
 
         $this->assertEquals($expected, iterator_to_array($this->request->getArguments()));
@@ -174,7 +207,17 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
     public function testGetPayloadArguments()
     {
         $expected = [
-            'foo' => 'baz'
+            'foo' => 'baz',
+            'list--0' => 'abc',
+            'list--1' => 'def',
+            'list--map--foo' => 'abc',
+            'list--map--bar' => 'def',
+            'map--foo' => 'abc',
+            'map--bar' => 'def',
+            'map--list--0' => 'abc',
+            'map--list--1' => 'def',
+            'map--map--foo' => 'abc',
+            'map--map--bar' => 'def'
         ];
 
         $this->assertEquals($expected, iterator_to_array($this->request->getPayloadArguments()));
@@ -224,9 +267,24 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCookies()
     {
-        $expected = [
-            new ReadOnlyCookie('foo', 'boo')
+        $expectedRawCookies = [
+            'foo' => 'boo',
+            'list--0' => 'abc',
+            'list--1' => 'def',
+            'list--map--foo' => 'abc',
+            'list--map--bar' => 'def',
+            'map--foo' => 'abc',
+            'map--bar' => 'def',
+            'map--list--0' => 'abc',
+            'map--list--1' => 'def',
+            'map--map--foo' => 'abc',
+            'map--map--bar' => 'def'
         ];
+
+        $expected = [];
+        foreach ($expectedRawCookies as $name => $value) {
+            $expected[] = new ReadOnlyCookie($name, $value);
+        }
 
         $this->assertEquals($expected, $this->request->getCookies());
     }
