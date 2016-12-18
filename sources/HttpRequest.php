@@ -400,7 +400,11 @@ class HttpRequest implements HttpRequestInterface
      */
     private function determinePath(array $server): string
     {
-        $path = str_replace('index.php', '', $server['SCRIPT_NAME']);
+        $path = '';
+        if (strpos($server['SCRIPT_NAME'], 'index.php') !== false) {
+            $path = str_replace('index.php', '', $server['SCRIPT_NAME']);
+        }
+
         $parts = explode('?', $server['REQUEST_URI']);
 
         return '/' . ltrim(substr($parts[0], strlen($path)), '/');
