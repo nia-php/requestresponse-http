@@ -158,6 +158,31 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::getPath
+     */
+    public function testGetPathOnPhpBuiltInServer()
+    {
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'SCRIPT_NAME' => 'unknown-fil',
+            'REQUEST_URI' => '/webserver/folder/file.png?xxx=yyy',
+            'HTTP_ACCEPT_LANGUAGE' => 'en',
+            'HTTP_ACCEPT_ENCODING' => 'gzip',
+            'SERVER_NAME' => 'john-does-localhost',
+            'REMOTE_PORT' => '123456',
+            'REMOTE_ADDR' => '127.127.127.127',
+            'HTTPS' => 'on'
+        ];
+
+        $stream = fopen('php://temp', 'r+');
+
+        $request = new HttpRequest($server, [], [], [], [], $stream);
+        $this->assertSame('/webserver/folder/file.png', $request->getPath());
+
+        fclose($stream);
+    }
+
+    /**
      * @covers \Nia\RequestResponse\Http\HttpRequest::createResponse
      */
     public function testCreateResponse()
