@@ -141,10 +141,10 @@ class HttpRequest implements HttpRequestInterface
         $this->method = $this->determineMethod($server);
         $this->header = $this->determineHeader($server);
         $this->path = $this->determinePath($server);
-        $this->arguments = new ReadOnlyMap(new Map($get));
-        $this->payloadArguments = new ReadOnlyMap(new Map($post));
+        $this->arguments = new ReadOnlyMap(new Map($this->narrowArray($get)));
+        $this->payloadArguments = new ReadOnlyMap(new Map($this->narrowArray($post)));
 
-        foreach ($cookies as $name => $value) {
+        foreach ($this->narrowArray($cookies) as $name => $value) {
             $this->cookies[] = new ReadOnlyCookie($name, $value);
         }
 
@@ -440,5 +440,33 @@ class HttpRequest implements HttpRequestInterface
     private function determineSecureConnection(array $server): bool
     {
         return array_key_exists('HTTPS', $server) && $server['HTTPS'];
+    }
+
+    /**
+     * Narrows PHP's native nested map into a non-nested map.
+     *
+     * @param mixed[] $array
+     *            The nested map to narrow.
+     * @param string|null $key
+     *            The parent key.
+     * @return string[] Narrowed map.
+     */
+    private function narrowArray(array $array, string $key = null)
+    {
+        if ($key) {
+            $key .= '--';
+        }
+
+        $result = [];
+
+        foreach ($array as $index => $value) {
+            if (is_array($value)) {
+                $result = array_merge($result, $this->narrowArray($value, $key . $index));
+            } else {
+                $result[$key . $index] = $value;
+            }
+        }
+
+        return $result;
     }
 }
