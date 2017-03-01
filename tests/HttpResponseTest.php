@@ -10,7 +10,7 @@
 declare(strict_types = 1);
 namespace Test\Nia\RequestResponse\Http;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Nia\RequestResponse\Http\HttpResponse;
 use Nia\RequestResponse\Http\HttpRequestInterface;
 use Nia\RequestResponse\Http\Cookie\Cookie;
@@ -18,7 +18,7 @@ use Nia\RequestResponse\Http\Cookie\Cookie;
 /**
  * Unit test for \Nia\RequestResponse\Http\HttpResponse.
  */
-class HttpResponseTest extends PHPUnit_Framework_TestCase
+class HttpResponseTest extends TestCase
 {
 
     /**
@@ -26,7 +26,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaults()
     {
-        $request = $this->getMock(HttpRequestInterface::class);
+        $request = $this->createMock(HttpRequestInterface::class);
         $response = new HttpResponse($request);
 
         $this->assertSame(200, $response->getStatusCode());
@@ -42,7 +42,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGetStatusCode()
     {
-        $request = $this->getMock(HttpRequestInterface::class);
+        $request = $this->createMock(HttpRequestInterface::class);
         $response = new HttpResponse($request);
 
         $this->assertSame($response, $response->setStatusCode(404));
@@ -55,7 +55,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSetGetContent()
     {
-        $request = $this->getMock(HttpRequestInterface::class);
+        $request = $this->createMock(HttpRequestInterface::class);
         $response = new HttpResponse($request);
 
         $this->assertSame($response, $response->setContent('foo bar'));
@@ -68,7 +68,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testAddGetCookies()
     {
-        $request = $this->getMock(HttpRequestInterface::class);
+        $request = $this->createMock(HttpRequestInterface::class);
         $response = new HttpResponse($request);
 
         $cookie1 = new Cookie('foo', 'bar');

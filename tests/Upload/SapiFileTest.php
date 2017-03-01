@@ -10,13 +10,13 @@
 declare(strict_types = 1);
 namespace Test\Nia\RequestResponse\Http\Upload;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Nia\RequestResponse\Http\Upload\SapiFile;
 
 /**
  * Unit test for \Nia\RequestResponse\Http\Upload\SapiFile.
  */
-class SapiFileTest extends PHPUnit_Framework_TestCase
+class SapiFileTest extends TestCase
 {
 
     private $tempFile = null;

@@ -10,13 +10,13 @@
 declare(strict_types = 1);
 namespace Test\Nia\RequestResponse\Http\Cookie;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Nia\RequestResponse\Http\Cookie\ReadOnlyCookie;
 
 /**
  * Unit test for \Nia\RequestResponse\Http\Cookie\ReadOnlyCookie.
  */
-class ReadOnlyCookieTest extends PHPUnit_Framework_TestCase
+class ReadOnlyCookieTest extends TestCase
 {
 
     /**
