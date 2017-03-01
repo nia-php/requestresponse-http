@@ -216,6 +216,31 @@ class HttpRequestTest extends TestCase
     }
 
     /**
+     * @covers \Nia\RequestResponse\Http\HttpRequest::getPath
+     */
+    public function testGetPathOnWithModRewrite()
+    {
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'SCRIPT_NAME' => '/2017-02-28--1/public/index.php',
+            'REQUEST_URI' => '/posts/123/?xxx=yyy',
+            'HTTP_ACCEPT_LANGUAGE' => 'en',
+            'HTTP_ACCEPT_ENCODING' => 'gzip',
+            'SERVER_NAME' => 'john-does-localhost',
+            'REMOTE_PORT' => '123456',
+            'REMOTE_ADDR' => '127.127.127.127',
+            'HTTPS' => 'on'
+        ];
+
+        $stream = fopen('php://temp', 'r+');
+
+        $request = new HttpRequest($server, [], [], [], [], $stream);
+        $this->assertSame('/posts/123/', $request->getPath());
+
+        fclose($stream);
+    }
+
+    /**
      * @covers \Nia\RequestResponse\Http\HttpRequest::createResponse
      */
     public function testCreateResponse()

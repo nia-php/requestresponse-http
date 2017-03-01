@@ -407,7 +407,12 @@ class HttpRequest implements HttpRequestInterface
 
         $parts = explode('?', $server['REQUEST_URI']);
 
-        return '/' . ltrim(substr($parts[0], strlen($path)), '/');
+        $length = 0;
+        if ($path !== '' && strpos($parts[0], $path) === 0) {
+            $length = strlen($path);
+        }
+
+        return '/' . ltrim(substr($parts[0], $length), '/');
     }
 
     /**
