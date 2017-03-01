@@ -10,7 +10,7 @@
 declare(strict_types = 1);
 namespace Test\Nia\RequestResponse\Http;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Nia\RequestResponse\Http\HttpRequest;
 use Nia\RequestResponse\Http\HttpRequestInterface;
 use Nia\RequestResponse\Http\HttpResponseInterface;
@@ -19,7 +19,7 @@ use Nia\RequestResponse\Http\Cookie\ReadOnlyCookie;
 /**
  * Unit test for \Nia\RequestResponse\Http\HttpRequest.
  */
-class HttpRequestTest extends PHPUnit_Framework_TestCase
+class HttpRequestTest extends TestCase
 {
 
     /** @var HttpRequestInterface */
