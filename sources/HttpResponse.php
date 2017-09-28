@@ -162,4 +162,20 @@ class HttpResponse implements HttpResponseInterface
     {
         return array_values($this->cookies);
     }
+
+    /**
+     * Adds a header to the response object.
+     *
+     * @param string $header
+     *              Name of the header
+     * @param string $content
+     *              Value of the header
+     *
+     * @return ResponseInterface Reference to this instance.
+     */
+    public function addHeader(string $header, string $content): ResponseInterface
+    {
+        $this->header->set($header, $content);
+        return $this;
+    }
 }
