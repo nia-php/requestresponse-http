@@ -26,6 +26,13 @@ interface FileInterface
     public function getField(): string;
 
     /**
+     * Returns the full temporary path of the uploaded file
+     *
+     * @return string The full path of the uploaded file
+     */
+    public function getFile(): string;
+
+    /**
      * Returns the client file name.
      *
      * @return string The client file name.
