@@ -310,6 +310,10 @@ class HttpRequestTest extends TestCase
         $this->assertSame(65926, $files[0]->getSize());
         $this->assertSame(43402, $files[1]->getSize());
         $this->assertSame(242685, $files[2]->getSize());
+
+        $this->assertTrue(is_file($files[0]->getFile()));
+        $this->assertTrue(is_file($files[1]->getFile()));
+        $this->assertTrue(is_file($files[2]->getFile()));
     }
 
     /**
