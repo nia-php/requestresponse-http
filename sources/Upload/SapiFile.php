@@ -91,6 +91,17 @@ class SapiFile implements FileInterface
      *
      * {@inheritDoc}
      *
+     * @see \Nia\RequestResponse\Http\Upload\FileInterface::getFile()
+     */
+    public function getFile(): string
+    {
+        return $this->file;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
      * @see \Nia\RequestResponse\Http\Upload\FileInterface::getName()
      */
     public function getName(): string
